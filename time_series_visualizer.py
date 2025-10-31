@@ -20,10 +20,11 @@ df = df[
 
 def draw_line_plot():
     # Draw line plot
-
-
-
-
+    fig, ax = plt.subplots(figsize=(15, 5))
+    ax.plot(df.index, df["value"], color='red', linewidth=1)
+    ax.set_title("fcc-forum-pageviews")
+    ax.set_xlabel("Date")
+    ax.set_ylabel("Page Views")
 
     # Save image and return fig (don't change this part)
     fig.savefig('line_plot.png')
@@ -31,10 +32,26 @@ def draw_line_plot():
 
 def draw_bar_plot():
     # Copy and modify data for monthly bar plot
-    df_bar = None
+    df_bar = df.copy()
+    df_bar["year"] = df_bar.index.year
+    df_bar["month"] = df_bar.index.month
+    df_bar = df_bar.groupby(["year", "month"])["value"].mean().unstack()
 
     # Draw bar plot
+    fig = df_bar.plot.bar(
+        figsize=(10, 7),
+        legend=True,
+        ylabel="Average Page Views",
+        xlabel="Years"
+    ).figure
 
+    plt.legend(
+        title="Months",
+        labels=[
+            "January", "February", "March", "April", "May", "June",
+            "July", "August", "September", "October", "November", "December"
+        ]
+    )
 
 
 
